@@ -1,7 +1,8 @@
-package ru.systempla.life_hack_studio_test
+package ru.systempla.life_hack_studio_test.main_activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.systempla.life_hack_studio_test.R
 
 class MainActivity : AppCompatActivity() {
 
