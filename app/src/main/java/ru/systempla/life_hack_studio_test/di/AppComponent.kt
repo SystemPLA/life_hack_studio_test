@@ -8,7 +8,10 @@ import ru.systempla.life_hack_studio_test.main_activity.MainPresenter
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = {AppModule.class})
+@Component(modules = [
+    AppModule::class,
+    ImageModule::class
+])
 interface AppComponent {
     fun inject(mainPresenter: MainPresenter)
     fun inject(detailsPresenter: DetailsPresenter)
