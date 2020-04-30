@@ -13,5 +13,5 @@ interface IDataSource {
     fun getCompanies(): Single<List<Company?>?>?
 
     @GET
-    fun getUserRepos(@Query("id") id: Int?): Single<CompanyDetails?>?
+    fun getCompanyDetails(@Query("id") id: Int): Single<CompanyDetails?>?
 }
