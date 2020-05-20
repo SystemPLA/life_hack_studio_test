@@ -1,19 +1,18 @@
 package ru.systempla.life_hack_studio_test.main_activity
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import moxy.MvpView
+import moxy.viewstate.strategy.alias.AddToEndSingle
+import moxy.viewstate.strategy.alias.OneExecution
 
-@StateStrategyType(value = AddToEndSingleStrategy::class)
+@AddToEndSingle
 interface MainView : MvpView{
+
     fun init()
     fun updateList()
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun showMessage(text: String?)
-
     fun showLoading()
     fun hideLoading()
-
     fun loadImage(avatarUrl: String?)
+
+    @OneExecution
+    fun showMessage(text: String?)
 }
