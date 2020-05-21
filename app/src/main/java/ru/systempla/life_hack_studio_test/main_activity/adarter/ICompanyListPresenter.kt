@@ -4,7 +4,7 @@ import io.reactivex.subjects.PublishSubject
 import ru.systempla.life_hack_studio_test.main_activity.CompanyItemView
 
 interface ICompanyListPresenter {
-    fun bind(view: CompanyItemView?)
+    fun bind(view: CompanyItemView)
     fun getCount(): Int
-    fun getClickSubject(): PublishSubject<CompanyItemView?>?
+    fun getClickSubject(): PublishSubject<CompanyItemView>
 }

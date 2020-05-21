@@ -11,6 +11,7 @@ import butterknife.ButterKnife
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.functions.Function
 import ru.systempla.life_hack_studio_test.R
+import ru.systempla.life_hack_studio_test.main_activity.CompanyItemView
 
 class CompanyRVAdapter(private val presenter : ICompanyListPresenter) : RecyclerView.Adapter<CompanyRVAdapter.ViewHolder>(){
 
@@ -28,7 +29,7 @@ class CompanyRVAdapter(private val presenter : ICompanyListPresenter) : Recycler
             ).subscribe(presenter.getClickSubject())
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), CompanyItemView {
 
         init {
             ButterKnife.bind(this, itemView)
@@ -41,6 +42,10 @@ class CompanyRVAdapter(private val presenter : ICompanyListPresenter) : Recycler
 
         @BindView(R.id.tv_title)
         lateinit var rvDateTimeTV: TextView
+
+        override fun getPos(): Int {
+            return pos
+        }
     }
 
 

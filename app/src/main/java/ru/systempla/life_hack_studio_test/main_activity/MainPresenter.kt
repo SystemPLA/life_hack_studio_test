@@ -2,58 +2,68 @@ package ru.systempla.life_hack_studio_test.main_activity
 
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import ru.systempla.life_hack_studio_test.main_activity.adarter.ICompanyListPresenter
+import ru.systempla.life_hack_studio_test.model.repo.ICompaniesRepo
+import java.util.*
+import javax.inject.Inject
 
 @InjectViewState
-class MainPresenter(mainThreadScheduler: Scheduler, ioThreadScheduler: Scheduler) :
+class MainPresenter(private val mainThreadScheduler: Scheduler, private val ioThreadScheduler: Scheduler) :
     MvpPresenter<MainView>() {
+
+    internal class CompaniesListPresenter : ICompanyListPresenter {
+        override fun getCount(): Int {
+            TODO("Not yet implemented")
+        }
+
+        var clickSubject: PublishSubject<CompanyItemView> =
+            PublishSubject.create<CompanyItemView>()
+        var companyBlocks: List<ForecastEntityRestModel> =
+            ArrayList<ForecastEntityRestModel>()
+
+        fun bind(view: CompanyItemView) {
+            view.
+            setDateTime(companyBlocks[view.getPos()].dt)
+            view.setTemperature(companyBlocks[view.getPos()].main.temp)
+            view.setWeatherDescription(companyBlocks[view.getPos()].weather.get(0).description)
+            view.setWeatherIcon(
+                companyBlocks[view.getPos()].weather.get(0).id,
+                companyBlocks[view.getPos()].weather.get(0).icon
+            )
+        }
+
+        val count: Int
+            get() = companyBlocks.size
+
+        fun getClickSubject(): PublishSubject<CompanyItemView> {
+            return clickSubject
+        }
+    }
+
+    @Inject
+    lateinit var companiesRepo: ICompaniesRepo
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
     }
 
-    fun loadData(){
+    fun loadData() {
         viewState.showLoading()
-        val disposable: Disposable = weatherRepo.loadWeather(
-            city,
-            ru.systempla.weatherapp.mvp.presenter.WeatherDataPresenter.OPEN_WEATHER_API_KEY,
-            ru.systempla.weatherapp.mvp.presenter.WeatherDataPresenter.METRIC_UNITS,
-            language
-        )
-            .subscribeOn(ioThreadScheduler)
-            .observeOn(mainThreadScheduler)
-            .subscribe({ model ->
-                viewState.setCityName(model.name)
-                viewState.setCurrentTemperature(model.main.temp)
-                viewState.setHumidity(model.main.humidity)
-                viewState.setPressure(model.main.pressure)
-                viewState.setWeatherDescription(model.weather.get(0).description)
-                viewState.setWeatherIcon(
-                    model.weather.get(0).id,
-                    model.sys.sunrise * 1000,
-                    model.sys.sunset * 1000
-                )
-                viewState.setWindSpeed(model.wind.speed)
-                val disposableSup: Disposable = weatherRepo.loadUVI(
-                    ru.systempla.weatherapp.mvp.presenter.WeatherDataPresenter.OPEN_WEATHER_API_KEY,
-                    model.coordinates.lat,
-                    model.coordinates.lon
-                )
-                    .subscribeOn(ioThreadScheduler)
-                    .observeOn(mainThreadScheduler)
-                    .subscribe({ uviRequestRestModel ->
-                        viewState.setUVIndex(uviRequestRestModel.uviValue)
-                        viewState.hideLoading()
-                    }, { t ->
-                        viewState.showMessage("ошибка получения UV индекса")
-                        viewState.setUVIndex(0)
-                        viewState.hideLoading()
-                    })
+        var disposable: Disposable? = companiesRepo.getCompanies()
+            ?.subscribeOn(ioThreadScheduler)
+            ?.observeOn(mainThreadScheduler)
+            ?.subscribe({ model ->
+                companiesListPresenter.companyBlocks.clear()
+                companiesListPresenter.companyBlocks.addAll(model.list)
+                viewState.updateList()
+                viewState.hideLoading()
+
             }, { t ->
-                viewState.showMessage("Место не найдено")
-                settings.resetSetting()
+                viewState.showMessage("Ошбка загрузки данных")
                 viewState.hideLoading()
             })
     }
