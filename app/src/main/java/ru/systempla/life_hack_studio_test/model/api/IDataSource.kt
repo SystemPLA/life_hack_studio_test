@@ -10,8 +10,8 @@ import ru.systempla.life_hack_studio_test.model.entity.CompanyDetails
 interface IDataSource {
 
     @GET
-    fun getCompanies(): Single<List<Company?>?>?
+    fun getCompanies(): Single<Collection<Company>>?
 
     @GET
-    fun getCompanyDetails(@Query("id") id: Int): Single<CompanyDetails?>?
+    fun getCompanyDetails(@Query("id") id: Int): Single<CompanyDetails>?
 }

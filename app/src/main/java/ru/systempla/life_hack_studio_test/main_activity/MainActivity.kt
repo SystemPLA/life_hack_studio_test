@@ -60,7 +60,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter =
             CompanyRVAdapter(
-                presenter.getCompanyListPresenter()
+                presenter.companiesListPresenter
             )
         recyclerView.adapter = adapter
     }

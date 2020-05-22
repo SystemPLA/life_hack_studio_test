@@ -10,7 +10,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AppModule::class,
-    ImageModule::class
+    ImageModule::class,
+    RepoModule::class
 ])
 interface AppComponent {
     fun inject(mainPresenter: MainPresenter)

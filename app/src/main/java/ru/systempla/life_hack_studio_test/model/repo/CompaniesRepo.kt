@@ -7,7 +7,7 @@ import ru.systempla.life_hack_studio_test.model.entity.CompanyDetails
 
 class CompaniesRepo(var api: IDataSource) : ICompaniesRepo {
 
-    override fun getCompanies(): Single<List<Company?>?>? = api.getCompanies()
+    override fun getCompanies(): Single<Collection<Company>>? = api.getCompanies()
 
-    override fun getCompanyDetails(id: Int): Single<CompanyDetails?>? = api.getCompanyDetails(id)
+    override fun getCompanyDetails(id: Int): Single<CompanyDetails>? = api.getCompanyDetails(id)
 }

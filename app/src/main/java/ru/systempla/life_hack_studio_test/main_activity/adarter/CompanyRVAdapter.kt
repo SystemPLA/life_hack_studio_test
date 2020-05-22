@@ -18,7 +18,7 @@ class CompanyRVAdapter(private val presenter : ICompanyListPresenter) : Recycler
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_company, parent, false))
 
-    override fun getItemCount() = presenter.getCount()
+    override fun getItemCount() = presenter.count
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.pos = position
@@ -26,7 +26,7 @@ class CompanyRVAdapter(private val presenter : ICompanyListPresenter) : Recycler
         RxView.clicks(holder.itemView)
             .map(
                 Function { o: Any? -> holder }
-            ).subscribe(presenter.getClickSubject())
+            ).subscribe(presenter.clickSubject)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), CompanyItemView {
@@ -35,19 +35,13 @@ class CompanyRVAdapter(private val presenter : ICompanyListPresenter) : Recycler
             ButterKnife.bind(this, itemView)
         }
 
-        var pos : Int = 0
+        override var pos: Int = 0
 
         @BindView(R.id.imageView)
-        lateinit var rvIconIV: ImageView
+        override lateinit var rvIconIV: ImageView
 
         @BindView(R.id.tv_title)
-        lateinit var rvDateTimeTV: TextView
-
-        override fun getPos(): Int {
-            return pos
-        }
+        override lateinit var rvInfoTV: TextView
     }
-
-
 
 }

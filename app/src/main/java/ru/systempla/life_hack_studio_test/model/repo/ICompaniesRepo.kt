@@ -5,6 +5,6 @@ import ru.systempla.life_hack_studio_test.model.entity.Company
 import ru.systempla.life_hack_studio_test.model.entity.CompanyDetails
 
 interface ICompaniesRepo {
-    fun getCompanies(): Single<List<Company?>?>?
-    fun getCompanyDetails(id: Int): Single<CompanyDetails?>?
+    fun getCompanies(): Single<Collection<Company>>?
+    fun getCompanyDetails(id: Int): Single<CompanyDetails>?
 }
